@@ -1,6 +1,6 @@
 FROM python:latest
 
-ENV SECKRET_KEY=dsfsdfgdfg123123
+ENV SECRET_KEY=dsfsdfgdfg123123
 ENV DEBUG=True
 
 WORKDIR /django_app

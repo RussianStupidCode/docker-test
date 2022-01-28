@@ -16,3 +16,11 @@ docker build --tag api .
 docker run -d -p 80:80 --name django_project api
 ```
 перейти в http://127.0.0.1/api/v1/
+
+
+## django + postgresql + nginx через docker-compose
+В директории compose
+```
+docker-compose up
+```
+перейти в http://127.0.0.1/api/v1/

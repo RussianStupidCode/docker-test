@@ -1,0 +1,51 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:11.0
+    ports:
+     - "5432:5432"
+    restart: always
+    env_file:
+      - ./db/env
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  api:
+    command: bash -c "cd ./dj-hw-6/ && python ./manage.py migrate && gunicorn stocks_products.wsgi -b 0.0.0.0:8001"
+    depends_on:
+      - db
+    links:
+      - db:db
+    image: stock-products
+    build:
+      context: django-project
+      dockerfile: ./Dockerfile
+    env_file:
+      - ./db/env
+    ports:
+      - "8000:8001"
+    networks:
+      - backend
+    
+  nginx:
+    build:
+      context: nginx
+      dockerfile: ./Dockerfile
+    depends_on:
+      - api
+    ports:
+      - "80:80"
+    networks:
+      - backend
+    volumes:
+      - ./django-project/dj-hw-6/static:/static
+
+volumes:
+  pg-data:
+
+networks:
+  backend:
+    driver: bridge
